@@ -21,14 +21,19 @@ class CatViewSet(viewsets.ModelViewSet):
     serializer_class = CatSerializer
 
     @action(detail=False, url_path='recent_white_cats')
+    # По умолчанию action описывает get запросы, но можно указать и другие
+    # через метод action(methods=['get'. 'delete'])
     def recent_white_cats(self, request):
         cats = Cat.objects.filter(color='White')[:5]
         serializer = self.get_serializer(cats, many=True)
         return Response(serializer.data)
 
     def get_serializer_class(self):
+        # Если запрошенное действие (action) — получение списка объектов ('list')
         if self.action == 'list':
+            # ...то применяем CatListSerializer
             return CatListSerializer
+        # А если запрошенное действие — не 'list', применяем CatSerializer
         return CatSerializer
 
 
