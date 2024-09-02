@@ -1,8 +1,11 @@
 import datetime
 from rest_framework import serializers
 import webcolors
+from djoser.serializers import UserSerializer
+from django.contrib.auth import get_user_model
 from .models import Cat, Owner, Achievement, AchievementCat, CHOICES
 
+User = get_user_model()
 
 class Hex2NameColor(serializers.Field):
     """Преобразует цвет в формате hex в человекочитаемый"""
@@ -86,3 +89,10 @@ class OwnerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Owner
         fields = ('first_name', 'last_name', 'cats')
+
+
+class CustomUserSerializer(UserSerializer):
+    class Meta:
+        model = User
+        fields = ('email', 'id', 'username', 'first_name', 'last_name')
+

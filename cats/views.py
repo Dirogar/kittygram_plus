@@ -1,9 +1,11 @@
+from djoser.views import UserViewSet
 from rest_framework import viewsets, mixins
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from .models import Cat, Owner
-from .serializers import CatSerializer, OwnerSerializer, CatListSerializer
+from .serializers import (CatSerializer, OwnerSerializer, CatListSerializer,
+                          CustomUserSerializer)
 
 
 class CreateRetrieveViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin,
@@ -26,7 +28,7 @@ class CatViewSet(viewsets.ModelViewSet):
     def recent_white_cats(self, request):
         cats = Cat.objects.filter(color='White')[:5]
         serializer = self.get_serializer(cats, many=True)
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTT)
 
     def get_serializer_class(self):
         # Если запрошенное действие (action) — получение списка объектов ('list')
@@ -37,7 +39,10 @@ class CatViewSet(viewsets.ModelViewSet):
         return CatSerializer
 
 
-
 class OwnerViewSet(viewsets.ModelViewSet):
     queryset = Owner.objects.all()
     serializer_class = OwnerSerializer
+
+
+class CustomUserViewSet(UserViewSet):
+    ...
